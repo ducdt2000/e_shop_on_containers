@@ -1,5 +1,6 @@
 services:
   sqldata:
+    platform: linux
     image: postgres:15.3
     restart: always
     environment:
@@ -10,6 +11,7 @@ services:
       - postgres:/var/lib/postgresql
 
   order-microservice:
+    platform: linux
     env_file:
       - src/order-microservice/.env
     ports:
@@ -17,7 +19,7 @@ services:
     build:
       dockerfile: ./src/order-microservice/Dockerfile
       context: .
-    command: CompileDaemon --build="go build main.go" --command=./main
+    command: CompileDaemon --build="go build cmd/main.go" --command=./main --color=true --polling=true 
     volumes:
       - ./src/order-microservice:/app
     depends_on:
