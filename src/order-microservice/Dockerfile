@@ -4,13 +4,13 @@ RUN mkdir /app
 
 WORKDIR /app
 
-ADD go.mod .
-ADD go.sum .
+ADD src/order-microservice/go.mod .
+# ADD src/order-microservice/go.sum .
 
 RUN go mod download
-ADD . .
+ADD src/order-microservice .
 
-RUN go build .
+RUN go build cmd/main.go
 
 RUN go install -mod=mod github.com/githubnemo/CompileDaemon
 
