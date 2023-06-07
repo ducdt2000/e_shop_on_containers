@@ -3,5 +3,5 @@ package main
 import "log"
 
 func main() {
-	log.Println("hoho")
+	log.Println("haiss")
 }

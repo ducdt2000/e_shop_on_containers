@@ -5,7 +5,7 @@ RUN mkdir /app
 WORKDIR /app
 
 ADD src/order-microservice/go.mod .
-# ADD src/order-microservice/go.sum .
+ADD src/order-microservice/go.sum .
 
 RUN go mod download
 ADD src/order-microservice .
