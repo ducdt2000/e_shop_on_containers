@@ -1,4 +1,4 @@
-package array
+package shared
 
 import (
 	"errors"
@@ -10,7 +10,7 @@ func Find[I interface{}](arr []I, expression func(el I) bool) (*I, error) {
 			return &v, nil
 		}
 	}
-	return nil, errors.New("Not found")
+	return nil, errors.New("not found")
 }
 
 func Filter[I interface{}](arr []I, expression func(el I) bool) ([]I, error) {
@@ -29,7 +29,7 @@ func FindIndex[I interface{}](arr []I, expression func(el I) bool) (int, error) 
 			return i, nil
 		}
 	}
-	return -1, errors.New("Not found")
+	return -1, errors.New("not found")
 }
 
 func Map[I interface{}, K interface{}](arr []I, expression func(el I) K) ([]K, error) {
@@ -40,4 +40,11 @@ func Map[I interface{}, K interface{}](arr []I, expression func(el I) K) ([]K, e
 	}
 
 	return res, nil
+}
+
+func Reduce[I interface{}, K interface{}](arr []I, reduceFunc func(prev K, curr I) K, init K) K {
+	for _, v := range arr {
+		init = reduceFunc(init, v)
+	}
+	return init
 }

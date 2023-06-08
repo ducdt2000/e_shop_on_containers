@@ -5,6 +5,7 @@ import (
 	"time"
 
 	seed_work "github.com/ducdt2000/e_shop_on_containers/order-microservice/internal/domain/seed-work"
+	array "github.com/ducdt2000/e_shop_on_containers/shared/helper"
 )
 
 type Buyer struct {
@@ -44,5 +45,10 @@ func (b Buyer) VerifyOrAddPaymentMethod(
 	cardHolderName string,
 	expiration time.Time,
 ) {
-	//here
+	existedPayment, err := array.Find(b._paymentMethods, func(pm PaymentMethod) bool {
+		return pm.IsEqualTo(cardType, cardNumber, expiration)
+	})
+	if err == nil {
+		// b.AddDomainEvent()
+	}
 }

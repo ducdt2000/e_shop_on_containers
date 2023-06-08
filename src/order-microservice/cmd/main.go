@@ -1,7 +1,17 @@
 package main
 
-import "log"
+import (
+	"log"
+
+	array "github.com/ducdt2000/e_shop_on_containers/shared/helper"
+)
 
 func main() {
-	log.Println("hussddsdfkl")
+	arr := []int{1, 2, 3, 4}
+
+	newArr, _ := array.Filter(arr, func(el int) bool {
+		return el == 5
+	})
+	log.Println(newArr)
+
 }

@@ -21,7 +21,7 @@ services:
       context: .
     command: CompileDaemon --build="go build cmd/main.go" --command=./main --color=true --polling=true 
     volumes:
-      - ./src/order-microservice:/app
+      - ./src/order-microservice:/app/src/order-microservice
     depends_on:
       - sqldata
 
