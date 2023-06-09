@@ -9,12 +9,12 @@ import (
 
 type PaymentMethod struct {
 	seed_work.Entity
-	_alias          string
-	_cardNumber     string
-	_securityNumber string
-	_cardHolderName string
-	_expiration     time.Time
-	_cardType       CardType
+	alias          string
+	cardNumber     string
+	securityNumber string
+	cardHolderName string
+	expiration     time.Time
+	cardType       CardType
 }
 
 func NewPaymentMethod(
@@ -42,23 +42,23 @@ func NewPaymentMethod(
 	}
 
 	paymentMethod := &PaymentMethod{
-		_alias:          alias,
-		_cardNumber:     cardNumber,
-		_securityNumber: securityNumber,
-		_cardHolderName: cardHolderName,
-		_expiration:     expiration,
-		_cardType:       cardType,
+		alias:          alias,
+		cardNumber:     cardNumber,
+		securityNumber: securityNumber,
+		cardHolderName: cardHolderName,
+		expiration:     expiration,
+		cardType:       cardType,
 	}
 
 	return paymentMethod, nil
 }
 
 func (pm *PaymentMethod) IsEqualTo(cardType CardType, cardNumber string, expiration time.Time) bool {
-	return pm._cardType == cardType &&
-		pm._cardNumber == cardNumber &&
-		pm._expiration.Equal(expiration)
+	return pm.cardType == cardType &&
+		pm.cardNumber == cardNumber &&
+		pm.expiration.Equal(expiration)
 }
 
 func (pm PaymentMethod) GetCardType() CardType {
-	return pm._cardType
+	return pm.cardType
 }

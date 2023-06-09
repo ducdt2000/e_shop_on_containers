@@ -4,11 +4,11 @@ import seed_work "github.com/ducdt2000/e_shop_on_containers/order-microservice/i
 
 type Address struct {
 	seed_work.ValueObject
-	_street  string
-	_city    string
-	_state   string
-	_country string
-	_zipCode string
+	street  string
+	city    string
+	state   string
+	country string
+	zipCode string
 }
 
 func NewEmptyAddress() *Address {
@@ -17,30 +17,30 @@ func NewEmptyAddress() *Address {
 
 func NewAddress(street string, city string, state string, country string, zipCode string) *Address {
 	return &Address{
-		_street:  street,
-		_city:    city,
-		_state:   state,
-		_country: country,
-		_zipCode: zipCode,
+		street:  street,
+		city:    city,
+		state:   state,
+		country: country,
+		zipCode: zipCode,
 	}
 }
 
 func (addr Address) GetStreet() string {
-	return addr._street
+	return addr.street
 }
 
 func (addr Address) GetCity() string {
-	return addr._city
+	return addr.city
 }
 
 func (addr Address) GetState() string {
-	return addr._state
+	return addr.state
 }
 
 func (addr Address) GetCountry() string {
-	return addr._country
+	return addr.country
 }
 
 func (addr Address) GetZipCode() string {
-	return addr._zipCode
+	return addr.zipCode
 }

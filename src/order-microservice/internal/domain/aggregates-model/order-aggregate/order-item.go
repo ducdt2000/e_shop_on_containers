@@ -8,12 +8,12 @@ import (
 
 type OrderItem struct {
 	seed_work.Entity
-	_productName string
-	_pictureUrl  string
-	_unitPrice   float32
-	_discount    float32
-	_units       int
-	_productId   int
+	productName string
+	pictureUrl  string
+	unitPrice   float32
+	discount    float32
+	units       int
+	productId   int
 }
 
 func NewEmptyOrderItem() (*OrderItem, error) {
@@ -37,12 +37,12 @@ func NewOrderItem(
 	}
 
 	return &OrderItem{
-		_productId:   productId,
-		_productName: productName,
-		_unitPrice:   unitPrice,
-		_pictureUrl:  pictureUrl,
-		_discount:    discount,
-		_units:       units,
+		productId:   productId,
+		productName: productName,
+		unitPrice:   unitPrice,
+		pictureUrl:  pictureUrl,
+		discount:    discount,
+		units:       units,
 	}, nil
 }
 
@@ -57,27 +57,27 @@ func NewOrderItemWithoutUnits(
 }
 
 func (oi OrderItem) GetPictureUrl() string {
-	return oi._pictureUrl
+	return oi.pictureUrl
 }
 
 func (oi OrderItem) GetCurrentDiscount() float32 {
-	return oi._discount
+	return oi.discount
 }
 
 func (oi OrderItem) GetUnitPrice() float32 {
-	return oi._unitPrice
+	return oi.unitPrice
 }
 
 func (oi OrderItem) GetItemProductName() string {
-	return oi._productName
+	return oi.productName
 }
 
 func (oi OrderItem) GetProductId() int {
-	return oi._productId
+	return oi.productId
 }
 
 func (oi OrderItem) GetUnits() int {
-	return oi._units
+	return oi.units
 }
 
 func (oi *OrderItem) SetNewDiscount(discount float32) error {
@@ -85,7 +85,7 @@ func (oi *OrderItem) SetNewDiscount(discount float32) error {
 		return errors.New("discount is not valid")
 	}
 
-	oi._discount = discount
+	oi.discount = discount
 	return nil
 }
 
@@ -94,6 +94,6 @@ func (oi *OrderItem) AddUnits(units int) error {
 		return errors.New("units is not valid")
 	}
 
-	oi._units += units
+	oi.units += units
 	return nil
 }

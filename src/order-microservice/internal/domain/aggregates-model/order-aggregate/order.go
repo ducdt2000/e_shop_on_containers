@@ -3,6 +3,7 @@ package order_aggregate
 import (
 	"time"
 
+	"github.com/ducdt2000/e_shop_on_containers/order-microservice/internal/domain/events"
 	seed_work "github.com/ducdt2000/e_shop_on_containers/order-microservice/internal/domain/seed-work"
 	array "github.com/ducdt2000/e_shop_on_containers/shared/helper"
 )
@@ -10,24 +11,24 @@ import (
 type Order struct {
 	seed_work.IAggregateRoot
 	seed_work.Entity
-	_orderDate       time.Time
-	_address         Address
-	_buyerId         int
-	_orderStatus     OrderStatus
-	_description     string
-	_isDraft         bool
-	_orderItems      []OrderItem
-	_paymentMethodId int
+	orderDate       time.Time
+	address         Address
+	buyerId         int
+	orderStatus     OrderStatus
+	description     string
+	isDraft         bool
+	orderItems      []OrderItem
+	paymentMethodId int
 }
 
 func NewDraft() *Order {
 	order := NewEmptyOrder()
-	order._isDraft = true
+	order.isDraft = true
 	return order
 }
 
 func NewEmptyOrder() *Order {
-	order := Order{_isDraft: false, _orderItems: []OrderItem{}}
+	order := Order{isDraft: false, orderItems: []OrderItem{}}
 	return &order
 }
 
@@ -47,16 +48,16 @@ func NewOrder(
 
 	order := Order{Entity: *entity}
 	if buyerId != nil {
-		order._buyerId = *buyerId
+		order.buyerId = *buyerId
 	}
 	if paymentMethodId != nil {
-		order._paymentMethodId = *paymentMethodId
+		order.paymentMethodId = *paymentMethodId
 	}
-	order._orderStatus = OrderStatus(Submitted)
-	order._orderDate = time.Now().UTC()
-	order._address = address
+	order.orderStatus = OrderStatus(Submitted)
+	order.orderDate = time.Now().UTC()
+	order.address = address
 
-	err := order._addOrderStartedDomainEvent(userId, userName, cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration)
+	err := order.addOrderStartedDomainEvent(userId, userName, cardTypeId, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration)
 
 	if err != nil {
 		return nil, err
@@ -66,27 +67,27 @@ func NewOrder(
 }
 
 func (o Order) GetAddress() *Address {
-	return &o._address
+	return &o.address
 }
 
 func (o Order) GetBuyerId() int {
-	return o._buyerId
+	return o.buyerId
 }
 
 func (o Order) GetOrderStatus() OrderStatus {
-	return o._orderStatus
+	return o.orderStatus
 }
 
 func (o Order) GetOrderItems() []OrderItem {
-	return o._orderItems
+	return o.orderItems
 }
 
 func (o *Order) SetPaymentMethodId(paymentMethodId int) {
-	o._paymentMethodId = paymentMethodId
+	o.paymentMethodId = paymentMethodId
 }
 
 func (o *Order) SetBuyerId(buyerId int) {
-	o._buyerId = buyerId
+	o.buyerId = buyerId
 }
 
 func (o *Order) AddOrderItem(
@@ -102,8 +103,8 @@ func (o *Order) AddOrderItem(
 		units = &defaultUnit
 	}
 
-	existedOrderForProduct, err := array.Find(o._orderItems, func(oi OrderItem) bool {
-		return oi._productId == productId
+	existedOrderForProduct, err := array.Find(o.orderItems, func(oi OrderItem) bool {
+		return oi.productId == productId
 	})
 
 	if err == nil {
@@ -117,26 +118,26 @@ func (o *Order) AddOrderItem(
 		if err != nil {
 			return err
 		}
-		o._orderItems = append(o._orderItems, *orderItem)
+		o.orderItems = append(o.orderItems, *orderItem)
 	}
 
 	return nil
 }
 
 func (o Order) GetTotal() float32 {
-	return array.Reduce(o._orderItems, func(prev float32, curr OrderItem) float32 {
-		return prev + (curr._unitPrice * float32(curr._units))
+	return array.Reduce(o.orderItems, func(prev float32, curr OrderItem) float32 {
+		return prev + (curr.unitPrice * float32(curr.units))
 	}, 0)
 }
 
 func (o *Order) SetAwaitingValidationStatus() {
-	if o._orderStatus == OrderStatus(Submitted) {
-		//add domain OrderStatusChangedToAwaitingValidationDomainEvent
-		o._orderStatus = OrderStatus(AwaitingValidation)
+	if o.orderStatus == OrderStatus(Submitted) {
+		o.AddDomainEvent(events.NewOrderStatusChangedToAwaitingValidationDomainEvent(o.GetId(), o.GetOrderItems()))
+		o.orderStatus = OrderStatus(AwaitingValidation)
 	}
 }
 
-func (o *Order) _addOrderStartedDomainEvent(userId string, userName string, cardTypeId int, cardNumber string, cardSecurityNumber string,
+func (o *Order) addOrderStartedDomainEvent(userId string, userName string, cardTypeId int, cardNumber string, cardSecurityNumber string,
 	cardHolderName string, cardExpiration time.Time) error {
 	return nil
 }

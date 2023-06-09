@@ -11,14 +11,14 @@ import (
 type Buyer struct {
 	seed_work.Entity
 	seed_work.IAggregateRoot
-	UUID            string
-	Name            string
-	_paymentMethods []PaymentMethod
+	UUID           string
+	Name           string
+	paymentMethods []PaymentMethod
 }
 
 func NewBuyer() (*Buyer, error) {
 	entity := seed_work.NewEntity()
-	return &Buyer{_paymentMethods: []PaymentMethod{}, Entity: *entity}, nil
+	return &Buyer{paymentMethods: []PaymentMethod{}, Entity: *entity}, nil
 }
 
 func NewBuyerWithName(uuid string, name string) (*Buyer, error) {
@@ -29,12 +29,12 @@ func NewBuyerWithName(uuid string, name string) (*Buyer, error) {
 		return nil, errors.New("name is empty")
 	}
 	entity := seed_work.NewEntity()
-	return &Buyer{UUID: uuid, Name: name, _paymentMethods: []PaymentMethod{}, Entity: *entity}, nil
+	return &Buyer{UUID: uuid, Name: name, paymentMethods: []PaymentMethod{}, Entity: *entity}, nil
 
 }
 
 func (b Buyer) GetPaymentMethods() []PaymentMethod {
-	return b._paymentMethods
+	return b.paymentMethods
 }
 
 func (b Buyer) VerifyOrAddPaymentMethod(
@@ -45,7 +45,7 @@ func (b Buyer) VerifyOrAddPaymentMethod(
 	cardHolderName string,
 	expiration time.Time,
 ) {
-	existedPayment, err := array.Find(b._paymentMethods, func(pm PaymentMethod) bool {
+	existedPayment, err := array.Find(b.paymentMethods, func(pm PaymentMethod) bool {
 		return pm.IsEqualTo(cardType, cardNumber, expiration)
 	})
 	if err == nil {

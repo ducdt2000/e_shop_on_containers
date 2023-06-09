@@ -8,35 +8,35 @@ import (
 )
 
 type Entity struct {
-	_id           int
-	_domainEvents []INotification
+	id           int
+	domainEvents []INotification
 }
 
 func NewEntity() *Entity {
-	return &Entity{_domainEvents: []INotification{}}
+	return &Entity{domainEvents: []INotification{}}
 }
 
 func (e Entity) GetId() int {
-	return e._id
+	return e.id
 }
 
 func (e *Entity) SetId(_id int) {
-	e._id = _id
+	e.id = _id
 }
 
 func (e Entity) GetDomainEvents() []INotification {
-	return e._domainEvents
+	return e.domainEvents
 }
 
 func (e *Entity) AddDomainEvent(item INotification) error {
-	e._domainEvents = append(e._domainEvents, item)
+	e.domainEvents = append(e.domainEvents, item)
 	return nil
 }
 
 func (e *Entity) RemoveDomainEvent(item INotification) error {
-	for i, v := range e._domainEvents {
+	for i, v := range e.domainEvents {
 		if reflect.DeepEqual(v, item) {
-			e._domainEvents = append(e._domainEvents[:i], e._domainEvents[i+1:])
+			e.domainEvents = append(e.domainEvents[:i], e.domainEvents[i+1:])
 			return nil
 		}
 	}
@@ -44,12 +44,12 @@ func (e *Entity) RemoveDomainEvent(item INotification) error {
 }
 
 func (e *Entity) ClearDomainEvent() {
-	e._domainEvents = []INotification{}
+	e.domainEvents = []INotification{}
 }
 
 func (e Entity) IsTransient() bool {
 	// 0 is default of int type
-	return e._id == 0
+	return e.id == 0
 }
 
 func (e Entity) Equals(obj interface{}) bool {
@@ -68,7 +68,7 @@ func (e Entity) Equals(obj interface{}) bool {
 func (e Entity) GetHashCode() int {
 	if !e.IsTransient() {
 		hash := fnv.New32a()
-		hash.Write([]byte(string(e._id)))
+		hash.Write([]byte(string(e.id)))
 		return int(hash.Sum32())
 	}
 
